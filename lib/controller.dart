@@ -1,17 +1,17 @@
 import 'package:mobx/mobx.dart';
 
 class Controller {
-  final heartsList = ObservableList.of(['❤', '❤', '❤']);
+  final heartsList = Observable(['❤', '❤', '❤']);
 
   void add() {
     runInAction(() {
-      heartsList.add('❤');
+      heartsList.value = [...heartsList.value, '❤'];
     });
   }
 
   void remove() {
     runInAction(() {
-      heartsList.removeLast();
+      heartsList.value = List.of(heartsList.value)..removeLast();
     });
   }
 }
