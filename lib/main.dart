@@ -44,7 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 width: 1024,
                 height: 512,
                 child: ChildWidget(
-                  heartsList: controller.heartsList,
+                  heartsList: controller.heartsList.toList(),
                 ),
               );
             }),
@@ -63,7 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
 class ChildWidget extends StatelessWidget {
   const ChildWidget({super.key, required this.heartsList});
-  final ObservableList<String> heartsList;
+  final List<String> heartsList;
 
   @override
   Widget build(BuildContext context) {
