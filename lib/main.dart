@@ -12,8 +12,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(            
-      home: MyHomePage(),
+    return const MaterialApp(
+      home: MyHomePage(),      
     );
   }
 }
@@ -35,26 +35,45 @@ class _MyHomePageState extends State<MyHomePage> {
         title: const Text('MobX ObservableList Page'),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Observer(builder: (_) {
-              print('rebuilt');
-              return SizedBox(
-                width: 1024,
-                height: 512,
-                child: ChildWidget(
-                  heartsList: controller.heartsList.toList(),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Observer(builder: (_) {
+                print('rebuilt');
+                return ConstrainedBox(
+                  constraints: const BoxConstraints(minHeight: 64, maxHeight: 128),
+                  child: ChildWidget(
+                    heartsList: controller.heartsList.toList(),
+                  ),
+                );
+              }),
+              const SizedBox(height: 24),
+              ConstrainedBox(
+                constraints: const BoxConstraints(minHeight: 128, maxHeight: 256),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    ElevatedButton(onPressed: controller.add, child: const Text('Add')),
+                    ElevatedButton(onPressed: controller.remove, child: const Text('Remove')),
+                    ElevatedButton(
+                      child: const Text('Show dialog'),
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return const AlertDialog(
+                                title: Text('Alert'),
+                                content: Text('Hello world'),
+                              );
+                            });
+                      },
+                    ),
+                  ],
                 ),
-              );
-            }),
-            Row(
-              children: [
-                ElevatedButton(onPressed: controller.add, child: const Text('Add')),
-                ElevatedButton(onPressed: controller.remove, child: const Text('Remove')),
-              ],
-            ),
-          ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -71,11 +90,13 @@ class ChildWidget extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         itemCount: heartsList.length,
         itemBuilder: (context, index) {
-          return SizedBox(
-            width: 112,
-            height: 48,
-            child: ListTile(
-              title: Text(heartsList[index]),
+          return LimitedBox(
+            maxWidth: 112,
+            child: DecoratedBox(
+              decoration: BoxDecoration(border: Border.all(color: Colors.black)),
+              child: ListTile(
+                title: Text(heartsList[index]),
+              ),
             ),
           );
         });
